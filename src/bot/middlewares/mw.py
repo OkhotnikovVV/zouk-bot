@@ -1,4 +1,4 @@
-from typing import Any, Awaitable, Callable, Dict, cast
+from typing import Any, Awaitable, Callable, Dict
 from aiogram import BaseMiddleware
 from aiogram import types
 from aiogram.filters import CommandStart
@@ -8,11 +8,6 @@ from aiogram.types import Message, TelegramObject
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.dispatcher.flags import get_flag
 from aiogram.utils.chat_action import ChatActionSender
-
-
-
-
-
 
 
 class ThrottlingMiddleware(BaseMiddleware):

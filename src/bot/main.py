@@ -1,31 +1,30 @@
-# import logging
-import asyncio
-from aiogram import Bot
-from src.bot.dispatcher import get_dispatcher
-# from keyboards import organizator
-# from apscheduler.schedulers.asyncio import AsyncIOScheduler
-# import datetime
-from src.db.create import create_database
 import os
+import asyncio
+# import logging
+from aiogram import Bot
 from dotenv import load_dotenv
+
+from src.bot.dispatcher import get_dispatcher
+from src.db.create import create_database
+
 
 #logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 
-token = os.environ.get('token')
+token = os.environ.get('TOKEN')
 
 
-async def my_coroutine():
-    # Your asynchronous task logic goes here
+async def my_coroutine() -> None:
+    """ Your asynchronous task logic goes here """
     print("Executing my coroutine...")
-bot = Bot(token=token)
-dp = get_dispatcher()
+
+
 
 async def main() -> None:
-    """Entry point
-    """
-
+    """ Entry point """
+    bot = Bot(token=token)
+    dp = get_dispatcher()
 
     async with asyncio.TaskGroup() as tg:
         # scheduler = AsyncIOScheduler(timezone='Europe/Moscow')
@@ -34,12 +33,8 @@ async def main() -> None:
         #                   run_date=datetime.datetime.strptime('2023-10-09 22:59:33.066562', '%Y-%m-%d %H:%M:%S.%f'))
         # scheduler.start()
 
-        # And the run events dispatching
         tg.create_task(create_database())
         tg.create_task(dp.start_polling(bot))
-        # await database.create_database()
-        # await database.get_users(path_database)
-
 
 
 if __name__ == '__main__':

@@ -1,14 +1,15 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
-main = ReplyKeyboardMarkup(
+main_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="Моя анкета"),
+            KeyboardButton(text="Поиск"),
             KeyboardButton(text="Статистика")
         ]
     ],
     resize_keyboard=True,
-    one_time_keyboard=True
+    one_time_keyboard=True,
+    selective=True,
 )
 
 rmk = ReplyKeyboardRemove()

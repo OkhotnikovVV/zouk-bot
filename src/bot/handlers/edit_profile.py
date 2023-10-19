@@ -7,7 +7,7 @@ from aiogram.fsm.context import FSMContext
 
 from src.bot.keyboards.builders.user import form_btn
 from src import db
-from src.bot.keyboards.reply import main, rmk
+# from src.bot.keyboards.reply import main_kb, rmk
 # from .utils.city import check
 #
 # from data.database import DataBase
