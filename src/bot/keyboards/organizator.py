@@ -1,9 +1,7 @@
-from aiogram.types import (
-    ReplyKeyboardMarkup,
-    KeyboardButton,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
-)
+from aiogram.types import ReplyKeyboardMarkup
+from aiogram.types import KeyboardButton
+from aiogram.types import InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton
 
 
 event_kb = ReplyKeyboardMarkup(

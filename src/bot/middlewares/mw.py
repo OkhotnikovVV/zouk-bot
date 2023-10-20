@@ -16,7 +16,6 @@ class ThrottlingMiddleware(BaseMiddleware):
         self.storage = storage
         self.counter = 0
 
-
     async def __call__(self,
                        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
                        event: TelegramObject,

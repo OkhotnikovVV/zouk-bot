@@ -1,5 +1,6 @@
 from aiogram import types
-from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 def form_btn(text: str | list) -> types.ReplyKeyboardMarkup:

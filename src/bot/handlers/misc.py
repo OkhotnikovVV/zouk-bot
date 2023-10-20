@@ -1,11 +1,12 @@
-from aiogram.filters import CommandStart
-from aiogram.filters import Command
 import asyncio
 from aiogram import types
 from aiogram import Router
+from aiogram.filters import Command
+from aiogram.filters import CommandStart
 
 from src import db
 from src.bot.keyboards import organizator
+
 
 router = Router()
 
