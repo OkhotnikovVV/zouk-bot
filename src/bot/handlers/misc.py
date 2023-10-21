@@ -32,3 +32,8 @@ async def command_test(message: types.Message):
 # async def save_message(message: types.Message):
 #     print('Перехват сообщений')
 #     await database.save_message(message)
+
+
+@router.callback_query()
+async def callback_main_keyboard(callback_query: types.CallbackQuery) -> None:
+    await callback_query.answer('Callback')

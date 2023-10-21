@@ -24,13 +24,16 @@ async def command_start(message: types.Message) -> None:
         await db.insert.add_user(message)
 
 
+@router.message(Command("help"))
+async def command_help(message: types.Message) -> None:
+    await message.answer("It is help!")
+
+
 @router.message(Command('go'))
 async def command_inside_event(message: types.Message) -> None:
-    print('Go')
     await message.answer('Hello', reply_markup=main_kb)
 
 
 @router.message(F.text.lower() == 'поиск')
 async def command_inside_event(message: types.Message) -> None:
-    print('sdfgdsfsd')
     await message.answer('Hello', reply_markup=find_kb())
