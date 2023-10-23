@@ -11,15 +11,6 @@ from src.bot.keyboards import organizator
 router = Router()
 
 
-@router.message(Command('test'))
-async def command_test(message: types.Message):
-    print('Вывод всех пользователей')
-    p = await asyncio.gather(db.select.get_users())
-    # await message.answer(str(message.message_id))
-    await message.answer(str(*p), reply_markup=organizator.event_kb)
-    # await message.answer(message.message_id)
-
-
 @router.message(Command('create_event'))#commands=['test'])
 async def command_test(message: types.Message):
     print('Создание ивента')

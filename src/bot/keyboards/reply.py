@@ -5,8 +5,8 @@ from aiogram.types import ReplyKeyboardMarkup
 from aiogram.types import ReplyKeyboardRemove
 
 
-main_kb = InlineKeyboardMarkup(inline_keyboard=[
-    [InlineKeyboardButton(text='sdgfsdgsfgs', callback_data='sfghf')]
+main_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text='Поиск', callback_data='Поиск')]
 ])
 
 rmk = ReplyKeyboardRemove()

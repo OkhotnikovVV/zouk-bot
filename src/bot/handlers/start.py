@@ -15,7 +15,6 @@ router = Router()
 
 @router.message(CommandStart())
 async def command_start(message: types.Message) -> None:
-    print('Start')
     p = await asyncio.gather(db.select.user_exists(message.from_user.id))
     if p[0]:
         print(*p, 'Есть такой')
@@ -36,4 +35,6 @@ async def command_inside_event(message: types.Message) -> None:
 
 @router.message(F.text.lower() == 'поиск')
 async def command_inside_event(message: types.Message) -> None:
-    await message.answer('Hello', reply_markup=find_kb())
+    await message.answer('r', reply_markup=find_kb())
+    # p = await asyncio.gather(db.select.get_users())
+    # await message.answer(str(*p))

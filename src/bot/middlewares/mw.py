@@ -21,8 +21,11 @@ class ThrottlingMiddleware(BaseMiddleware):
                        event: TelegramObject,
                        data: Dict[str, Any]
                        ) -> Any:
-
-        user = event.message.from_user.id
+        # print(event)
+        if event.message:
+            user = event.message.from_user.id
+        else:
+            user = event.callback_query.from_user.id
 
         check_user = await self.storage.redis.get(name=user)
         print(self.counter)

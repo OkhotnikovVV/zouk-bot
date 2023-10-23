@@ -11,8 +11,10 @@ from aiogram.types.bot_command_scope_default import BotCommandScopeDefault
 
 
 async def on_startup(bot: Bot) -> None:
+    await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_my_commands([
-        types.BotCommand(command="start", description="Поехали..."),
+        types.BotCommand(command="start", description="Принять участие..."),
+        types.BotCommand(command="go", description="Поехали..."),
         types.BotCommand(command="help", description="Что мы умеем..."),
     ], scope=BotCommandScopeDefault())
 
