@@ -20,8 +20,8 @@ router = Router()
 @router.message(Command('reg'))
 async def my_form(message: Message, state: FSMContext, db: db = db):
 
-    if not await asyncio.gather(db.user_exists(message.from_user.id)):
-        data = await db.get(message.from_user.id)
+    if not await asyncio.gather(db.select.user_exists(message.from_user.id)):
+        data = await db.select.get_users(message.from_user.id)
         usr = data.one()
         pattern = {
             "photo": usr.photo,
@@ -114,11 +114,12 @@ async def incorrect_form_sex(message: Message, state: FSMContext):
 @router.message(Form.photo, F.photo)
 async def form_photo(message: Message, state: FSMContext, db: db = db):
     phid = message.photo[-1].file_id
+    print(message)
     data = await state.get_data()
     # data["user_id"] = message.from_user.id
     # data["photo"] = phid
     print(phid)
-    await db.edit_user(message)
+    await db.update.edit_user(message)
     # await db.insert(**data)
     await state.clear()
     frm_text = []

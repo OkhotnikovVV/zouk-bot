@@ -29,12 +29,18 @@ async def command_help(message: types.Message) -> None:
 
 
 @router.message(Command('go'))
-async def command_inside_event(message: types.Message) -> None:
-    await message.answer('Hello', reply_markup=main_kb)
+async def command_inside_event(message: types.Message, db: db = db) -> None:
+    pass
+    # print(*p)
+
+    # await message.answer('Hello', reply_markup=main_kb)
+    # await message.answer(str(p))
 
 
 @router.message(F.text.lower() == 'поиск')
 async def command_inside_event(message: types.Message) -> None:
-    await message.answer('r', reply_markup=find_kb())
+    users = await db.select.get_users()
+    await message.answer_photo(photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ', reply_markup=find_kb(users))
+    # await message.answer(' f' * 30, reply_markup=find_kb(users))
     # p = await asyncio.gather(db.select.get_users())
     # await message.answer(str(*p))

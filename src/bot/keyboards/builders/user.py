@@ -1,3 +1,4 @@
+from src import db
 from aiogram import types
 # from aiogram.types import KeyboardButton
 from aiogram.types import InlineKeyboardButton
@@ -15,13 +16,9 @@ def form_btn(text: str | list) -> types.ReplyKeyboardMarkup:
     return builder.as_markup(resize_keyboard=True, one_time_keyboard=True)
 
 
-def find_kb() -> types.InlineKeyboardMarkup:
-    text = ['Иван'] * 5
-    keyboard = InlineKeyboardMarkup(row_width=2)
-    keyboard.add(InlineKeyboardButton("Кнопка 1", callback_data="button1"),
-                 InlineKeyboardButton("Кнопка 2", callback_data="button2"))
-    keyboard.add(InlineKeyboardButton("Кнопка 3", callback_data="button3"),
-                 InlineKeyboardButton("Кнопка 4", callback_data="button4"))
+def find_kb(users) -> types.InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    [builder.row(types.InlineKeyboardButton(text=' '.join(filter(None, [user[1], user[2]])), callback_data='sdfg')) for user in users]
+    return builder.as_markup()
 
 
-    return keyboard
