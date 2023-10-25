@@ -1,4 +1,5 @@
 import asyncio
+from aiogram import F
 from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
@@ -7,7 +8,7 @@ from aiogram.filters import CommandStart
 from src import db
 from src.bot.callbacks.callback import EventUsersCallback
 from src.bot.keyboards import organizator
-from src.bot.keyboards.builders.user import show_event_user
+from src.bot.keyboards.builders.user import show_user
 
 router = Router()
 
@@ -37,4 +38,8 @@ async def callbacks_num_change_fab(
         callback: types.CallbackQuery,
         callback_data: EventUsersCallback
 ):
-    await callback.message.edit_reply_markup(reply_markup=show_event_user(callback_data))
+
+    user = callback_data.telegram_id
+    print(user, 'cd')
+    await callback.message.edit_reply_markup(reply_markup=show_user(user))
+

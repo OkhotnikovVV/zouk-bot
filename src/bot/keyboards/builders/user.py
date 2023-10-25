@@ -20,14 +20,14 @@ def form_btn(text: str | list) -> types.ReplyKeyboardMarkup:
 def find_kb(users) -> types.InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     print(users)
-    [builder.row(types.InlineKeyboardButton(text=' '.join(filter(None, [user[1], user[2]])), callback_data=EventUsersCallback(telegram_id=user[0], name=user[1], telegram_link=user[2], photo_id=user[3]).pack())) for user in users]
+    [builder.row(types.InlineKeyboardButton(text=' '.join(filter(None, [user['name'], user['username']])), callback_data=EventUsersCallback(foo='id', telegram_id=user['telegram_id']).pack())) for user in users]
     return builder.as_markup()
 
 
-def show_event_user(callback_data) -> types.InlineKeyboardMarkup:
-    print(callback_data)
+def show_user(user) -> types.InlineKeyboardMarkup:
+    """ """
+    print(user)
     builder = InlineKeyboardBuilder()
-    builder.button('')
-    # [builder.row(types.InlineKeyboardButton(text=' '.join(filter(None, [user[1], user[2]])), callback_data=EventUsersCallback(action="change", value=user[0]).pack())) for user in users]
+    builder.button(text='выап', callback_data='sdfgsdfg')
     return builder.as_markup()
 

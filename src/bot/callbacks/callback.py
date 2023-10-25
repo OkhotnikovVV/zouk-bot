@@ -5,7 +5,10 @@ from aiogram.filters.callback_data import CallbackData
 
 
 class EventUsersCallback(CallbackData, prefix="Event users"):
+    foo: str
     telegram_id: int
-    name: str = ''
-    telegram_link: str = ''
-    photo_id: str = ''
+    # name: str = ''
+    # telegram_link: str = ''
+    # photo_id: str = ''
+
+
