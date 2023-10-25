@@ -5,8 +5,9 @@ from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
 from src import db
+from src.bot.callbacks.callback import EventUsersCallback
 from src.bot.keyboards import organizator
-
+from src.bot.keyboards.builders.user import show_event_user
 
 router = Router()
 
@@ -25,6 +26,15 @@ async def command_test(message: types.Message):
 #     await database.save_message(message)
 
 
-@router.callback_query()
-async def callback_main_keyboard(callback_query: types.CallbackQuery) -> None:
-    await callback_query.answer('Callback')
+# @router.callback_query()
+# async def callback_main_keyboard(callback_query: types.CallbackQuery, user) -> None:
+#     print(user)
+#     await callback_query.answer('Callback')
+
+
+@router.callback_query(EventUsersCallback.filter())
+async def callbacks_num_change_fab(
+        callback: types.CallbackQuery,
+        callback_data: EventUsersCallback
+):
+    await callback.message.edit_reply_markup(reply_markup=show_event_user(callback_data))
