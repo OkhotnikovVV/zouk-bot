@@ -18,6 +18,10 @@ def form_btn(text: str | list) -> types.ReplyKeyboardMarkup:
 
 
 def find_kb(users) -> types.InlineKeyboardMarkup:
+    """ Клавиатура найденных участников ивента.
+    В тексте каждой кнопки - first_name, last_name, username.
+    После нажатия выводится анкета участника.
+    """
     builder = InlineKeyboardBuilder()
     print(users)
     [builder.row(types.InlineKeyboardButton(text=' '.join(filter(None, [user['name'], user['username']])), callback_data=EventUsersCallback(foo='id', telegram_id=user['telegram_id']).pack())) for user in users]
@@ -25,9 +29,8 @@ def find_kb(users) -> types.InlineKeyboardMarkup:
 
 
 def show_user(user) -> types.InlineKeyboardMarkup:
-    """ """
-    print(user)
+    """ Клавиатура анкеты участника ивента. """
     builder = InlineKeyboardBuilder()
-    builder.button(text='выап', callback_data='sdfgsdfg')
+    builder.button(text=str(user), callback_data='sdfgsdfg')
     return builder.as_markup()
 

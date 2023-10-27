@@ -34,12 +34,14 @@ async def command_test(message: types.Message):
 
 
 @router.callback_query(EventUsersCallback.filter())
-async def callbacks_num_change_fab(
+async def callbacks_show_users_fab(
         callback: types.CallbackQuery,
         callback_data: EventUsersCallback
 ):
-
+    """ Ловим Callback с telegram_id, чтобы вывести анкету участника. """
+    # Необходимо добавить, чтобы вместе с анкетой выводился
+    # список остальных участников
     user = callback_data.telegram_id
-    print(user, 'cd')
+    print(user, 'callbacks_show_users_fab')
     await callback.message.edit_reply_markup(reply_markup=show_user(user))
 
