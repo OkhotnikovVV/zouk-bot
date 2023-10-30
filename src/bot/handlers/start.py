@@ -31,7 +31,7 @@ async def command_help(message: types.Message) -> None:
 
 @router.message(Command('go'))
 async def command_inside_event(message: types.Message, db: db = db) -> None:
-    user = 'telegram_id_' + str(message.from_user.id)
+    user = str(message.from_user.id)
     profile = await db.select.get_user(user)
     await message.answer(str(profile))
     # print(*p)

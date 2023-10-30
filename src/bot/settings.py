@@ -13,7 +13,6 @@ class DbConf:
     path: str = os.environ.get("DATABASE_PATH", "../db/data/my_database.db")
 
 
-
 @dataclass(frozen=True)
 class RedisConf:
     """ Redis connection variables """
@@ -21,6 +20,15 @@ class RedisConf:
     host: str = os.environ.get("REDIS_HOST", "redis://127.0.0.1")
     port: int = int(os.environ.get("REDIS_PORT", 6379))
     db: str = int(os.environ.get("REDIS_DATABASE", 0))
+
+
+@dataclass(frozen=True)
+class CacheConf:
+    """ Redis-cache connection variables """
+
+    host: str = os.environ.get("REDIS_HOST", "redis://127.0.0.1")
+    port: int = int(os.environ.get("REDIS_PORT", 6379))
+    db: str = int(os.environ.get("REDIS_DATABASE", 1))
 
 
 @dataclass(frozen=True)
@@ -36,6 +44,7 @@ class Configs:
     bot = BotConf()
     redis = RedisConf()
     db = DbConf()
+    cache = CacheConf()
 
 
 conf = Configs()
