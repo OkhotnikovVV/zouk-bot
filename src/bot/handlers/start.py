@@ -40,9 +40,10 @@ async def command_inside_event(message: types.Message, db: db = db) -> None:
     # await message.answer(str(p))
 
 
-@router.message(F.text.lower() == 'поиск')
+@router.message(Command('meow'))
 async def command_inside_event(message: types.Message) -> None:
     """ Поиск участников по базе. Только тех, кто зарегистрирован на данный ивент. """
+    await message.delete()
     users = await db.select.get_users()
     await message.answer_photo(photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ', reply_markup=find_kb(users))
 

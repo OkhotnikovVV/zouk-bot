@@ -8,8 +8,9 @@ from aiogram.filters import CommandStart
 from src import db
 from src.bot.callbacks.callback import EventUsersCallback
 from src.bot.keyboards import organizator
-from src.bot.keyboards.builders.user import show_user
+from src.bot.keyboards.builders.user import show_user, invite
 from src.bot.keyboards.builders.user import find_kb
+from src.db.select import get_user
 
 router = Router()
 
@@ -40,13 +41,14 @@ async def callbacks_show_users_fab(
         callback_data: EventUsersCallback
 ):
     """ Ловим Callback с telegram_id, чтобы вывести анкету участника. """
-    # Необходимо добавить, чтобы вместе с анкетой выводился
-    # список остальных участников
-    user = callback_data.telegram_id
+    # Необходимо добавить, кнопку <Назад>
+    user = await get_user(callback_data.telegram_id)
     await callback.message.delete()
     await callback.message.answer_photo(
         photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ',
-        reply_markup=show_user(user))
+        caption=f"<b>{user['name']}</b>",
+        parse_mode="HTML",
+        reply_markup=invite(user))
 
     # await callback.message.edit_reply_markup(reply_markup=show_user(user))
 
