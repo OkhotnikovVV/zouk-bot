@@ -2,8 +2,26 @@ from typing import Dict
 import json
 from aiogram.fsm.storage.redis import RedisStorage
 
+from src.bot.utils.parser import parser
 from src.cache import cache
 from src.db.transaction import transaction
+
+
+@transaction
+async def refer_to_db(db, user):
+    db.row_factory = lambda column, row: dict(zip([col[0] for col in column.description], row))
+    cursor = await db.cursor()
+    await cursor.execute(f"""
+        SELECT
+            telegram_id,
+            username,
+            first_name,
+            last_name,
+            photo_id
+        FROM users
+        WHERE telegram_id = {user}
+        """)
+    return await cursor.fetchone()
 
 
 async def get_user(user: int, storage: cache = cache) -> Dict:
@@ -12,28 +30,9 @@ async def get_user(user: int, storage: cache = cache) -> Dict:
     if data:
         profile = json.loads(data)
     else:
-        @transaction
-        async def refer_to_db(db):
-            db.row_factory = lambda column, row: dict(zip([col[0] for col in column.description], row))
-            cursor = await db.cursor()
-            await cursor.execute(f"""
-                SELECT
-                    telegram_id,
-                    username,
-                    first_name,
-                    last_name,
-                    photo_id
-                FROM users
-                WHERE telegram_id = {user}
-                """)
-            return await cursor.fetchone()
-
-        row = await refer_to_db()
-        profile = {}
+        row = await refer_to_db(user)
         telegram_id = row['telegram_id']
-        profile['name'] = ' '.join(filter(None, (row['first_name'], row['last_name'])))
-        profile['username'] = ' '.join(filter(None, (row['username'],)))
-        profile['photo'] = row['photo_id']
+        profile = await parser(row)
         await storage.client.set(name='telegram_id:' + str(telegram_id), value=json.dumps(profile))
     return profile
 

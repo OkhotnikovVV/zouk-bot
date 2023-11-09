@@ -37,5 +37,5 @@ def show_user(user) -> types.InlineKeyboardMarkup:
 def invite(user) -> types.InlineKeyboardMarkup:
     """ Кнопка приглашения участника. """
     builder = InlineKeyboardBuilder()
-    builder.button(text='Пригласить', callback_data='sdfgsdfg')
+    builder.button(text='Пригласить', callback_data='invite')
     return builder.as_markup()

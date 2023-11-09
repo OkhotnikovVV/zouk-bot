@@ -1,5 +1,6 @@
 import asyncio
 from aiogram import F
+from aiogram import Bot
 from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
@@ -52,3 +53,10 @@ async def callbacks_show_users_fab(
 
     # await callback.message.edit_reply_markup(reply_markup=show_user(user))
 
+
+@router.callback_query(F.callback_data("invite"))
+async def callbacks_show_users_fab(
+        callback: types.CallbackQuery,
+        callback_data: EventUsersCallback):
+    print('приглашение')
+    await Bot.send_message(603776715, text='Приглашение')
