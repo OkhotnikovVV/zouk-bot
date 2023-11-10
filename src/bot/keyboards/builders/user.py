@@ -5,7 +5,7 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.utils.keyboard import InlineKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, KeyboardBuilder
-from src.bot.callbacks.callback import EventUsersCallback
+from src.bot.callbacks.callback import EventUsersCallback, InviteUser
 
 
 def form_btn(text: str | list) -> types.ReplyKeyboardMarkup:
@@ -24,7 +24,15 @@ def find_kb(users) -> types.InlineKeyboardMarkup:
     """
     builder = InlineKeyboardBuilder()
     print(users)
-    [builder.row(types.InlineKeyboardButton(text=' '.join(filter(None, [user['name'], user['username']])), callback_data=EventUsersCallback(foo='id', telegram_id=user['telegram_id']).pack())) for user in users]
+    [
+        builder.row(types.InlineKeyboardButton(
+            text=' '.join(filter(None, [user['name'], user['username']])),
+            callback_data=EventUsersCallback(
+                foo='id',
+                telegram_id=user['telegram_id']
+            ).pack())
+        ) for user in users
+    ]
     return builder.as_markup()
 
 
@@ -34,8 +42,19 @@ def show_user(user) -> types.InlineKeyboardMarkup:
     builder.button(text=str(user), callback_data='sdfgsdfg')
     return builder.as_markup()
 
-def invite(user) -> types.InlineKeyboardMarkup:
+
+def invite(from_user, to_user) -> types.InlineKeyboardMarkup:
     """ Кнопка приглашения участника. """
     builder = InlineKeyboardBuilder()
-    builder.button(text='Пригласить', callback_data='invite')
+    builder.button(text='Пригласить', callback_data=InviteUser(
+                from_user=from_user,
+                to_user=to_user
+            ).pack())
+    return builder.as_markup()
+
+
+def confirm_invitation(user) -> types.InlineKeyboardMarkup:
+    """ Кнопка согласия на приглашение. """
+    builder = InlineKeyboardBuilder()
+    builder.button(text='Подтвердить', callback_data='dsfgsdfgsdfg')
     return builder.as_markup()

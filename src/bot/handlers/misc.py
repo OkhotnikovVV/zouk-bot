@@ -7,9 +7,9 @@ from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
 from src import db
-from src.bot.callbacks.callback import EventUsersCallback
+from src.bot.callbacks.callback import EventUsersCallback, InviteUser
 from src.bot.keyboards import organizator
-from src.bot.keyboards.builders.user import show_user, invite
+from src.bot.keyboards.builders.user import show_user, invite, confirm_invitation
 from src.bot.keyboards.builders.user import find_kb
 from src.db.select import get_user
 
@@ -37,10 +37,7 @@ async def command_test(message: types.Message):
 
 
 @router.callback_query(EventUsersCallback.filter())
-async def callbacks_show_users_fab(
-        callback: types.CallbackQuery,
-        callback_data: EventUsersCallback
-):
+async def callbacks_show_users_fab(callback: types.CallbackQuery, callback_data: EventUsersCallback):
     """ Ловим Callback с telegram_id, чтобы вывести анкету участника. """
     # Необходимо добавить, кнопку <Назад>
     user = await get_user(callback_data.telegram_id)
@@ -49,14 +46,29 @@ async def callbacks_show_users_fab(
         photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ',
         caption=f"<b>{user['name']}</b>",
         parse_mode="HTML",
-        reply_markup=invite(user))
+        reply_markup=invite(callback.from_user.id, callback_data.telegram_id)
+    )
 
-    # await callback.message.edit_reply_markup(reply_markup=show_user(user))
+
+@router.callback_query(InviteUser.filter())
+async def callbacks_show(callback: types.CallbackQuery, callback_data: InviteUser, bot: Bot):
+    """ Ловим Callback с telegram_id взаимодействующих участников. """
+
+    print('приглашение', callback_data.from_user, callback_data.to_user)
+    await bot.send_message(
+        chat_id=callback_data.to_user,
+        text=f'Вас пригласил {callback_data.from_user}',
+        reply_markup=confirm_invitation(callback_data.from_user)
+    )
 
 
-@router.callback_query(F.callback_data("invite"))
-async def callbacks_show_users_fab(
-        callback: types.CallbackQuery,
-        callback_data: EventUsersCallback):
-    print('приглашение')
-    await Bot.send_message(603776715, text='Приглашение')
+@router.callback_query(InviteUser.filter())
+async def callbacks_show(callback: types.CallbackQuery, callback_data: InviteUser, bot: Bot):
+    """ Ловим Callback с telegram_id взаимодействующих участников. """
+
+    print('приглашение', callback_data.from_user, callback_data.to_user)
+    await bot.send_message(
+        chat_id=callback_data.to_user,
+        text=f'Вас пригласил {callback_data.from_user}',
+        reply_markup=confirm_invitation(callback_data.from_user)
+    )

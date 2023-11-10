@@ -5,11 +5,17 @@ from aiogram.filters.callback_data import CallbackData
 
 
 class EventUsersCallback(CallbackData, prefix="Event users"):
-    """ Передаём telegram_id через Callback """
+    """ Передаём telegram_id через Callback. """
     foo: str
     telegram_id: int
-    # name: str = ''
-    # telegram_link: str = ''
-    # photo_id: str = ''
 
 
+class InviteUser(CallbackData, prefix="Invite user"):
+    """ Передаём telegram_id через Callback. """
+    from_user: int
+    to_user: int
+
+
+class Agreement(CallbackData, prefix="Agreement"):
+    """ Если True, значит второй участник принял приглашение. """
+    exist: bool
