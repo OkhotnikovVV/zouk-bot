@@ -5,7 +5,10 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.utils.keyboard import InlineKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, KeyboardBuilder
-from src.bot.callbacks.callback import EventUsersCallback, InviteUser
+
+from src.bot.callbacks.callback import Agreement
+from src.bot.callbacks.callback import EventUsersCallback
+from src.bot.callbacks.callback import InviteUser
 
 
 def form_btn(text: str | list) -> types.ReplyKeyboardMarkup:
@@ -47,14 +50,17 @@ def invite(from_user, to_user) -> types.InlineKeyboardMarkup:
     """ Кнопка приглашения участника. """
     builder = InlineKeyboardBuilder()
     builder.button(text='Пригласить', callback_data=InviteUser(
-                from_user=from_user,
-                to_user=to_user
-            ).pack())
+        from_user=from_user,
+        to_user=to_user
+        ).pack())
     return builder.as_markup()
 
 
-def confirm_invitation(user) -> types.InlineKeyboardMarkup:
+def confirm_invitation(back_to_user) -> types.InlineKeyboardMarkup:
     """ Кнопка согласия на приглашение. """
     builder = InlineKeyboardBuilder()
-    builder.button(text='Подтвердить', callback_data='dsfgsdfgsdfg')
+    builder.button(text='Подтвердить', callback_data=Agreement(
+        exist=True,
+        back_to_user=back_to_user
+        ).pack())
     return builder.as_markup()

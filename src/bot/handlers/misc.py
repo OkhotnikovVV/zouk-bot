@@ -7,7 +7,9 @@ from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
 from src import db
-from src.bot.callbacks.callback import EventUsersCallback, InviteUser
+from src.bot.callbacks.callback import Agreement
+from src.bot.callbacks.callback import EventUsersCallback
+from src.bot.callbacks.callback import InviteUser
 from src.bot.keyboards import organizator
 from src.bot.keyboards.builders.user import show_user, invite, confirm_invitation
 from src.bot.keyboards.builders.user import find_kb
@@ -19,8 +21,8 @@ router = Router()
 @router.message(Command('create_event'))#commands=['test'])
 async def command_test(message: types.Message):
     print('Создание ивента')
-    p = await asyncio.gather(db.insert.create_event(message))
-    g = await asyncio.gather(db.select.get_event())
+    p = await db.insert.create_event(message)
+    g = await db.select.get_event()
     await message.answer(str(g))
     # await message.answer(message.message_id)
 
@@ -52,7 +54,7 @@ async def callbacks_show_users_fab(callback: types.CallbackQuery, callback_data:
 
 @router.callback_query(InviteUser.filter())
 async def callbacks_show(callback: types.CallbackQuery, callback_data: InviteUser, bot: Bot):
-    """ Ловим Callback с telegram_id взаимодействующих участников. """
+    """ После нажатия выведем кнопку у приглашённого. """
 
     print('приглашение', callback_data.from_user, callback_data.to_user)
     await bot.send_message(
@@ -62,13 +64,12 @@ async def callbacks_show(callback: types.CallbackQuery, callback_data: InviteUse
     )
 
 
-@router.callback_query(InviteUser.filter())
-async def callbacks_show(callback: types.CallbackQuery, callback_data: InviteUser, bot: Bot):
-    """ Ловим Callback с telegram_id взаимодействующих участников. """
+@router.callback_query(Agreement.filter())
+async def callbacks_agreement(callback: types.CallbackQuery, callback_data: Agreement, bot: Bot):
+    """ После нажатия отправим 'Подтверждено' инициатору приглашения. """
 
-    print('приглашение', callback_data.from_user, callback_data.to_user)
+    print('согласие', callback_data.back_to_user)
     await bot.send_message(
-        chat_id=callback_data.to_user,
-        text=f'Вас пригласил {callback_data.from_user}',
-        reply_markup=confirm_invitation(callback_data.from_user)
+        chat_id=callback_data.back_to_user,
+        text=f'Подтверждено {callback_data.back_to_user}'
     )

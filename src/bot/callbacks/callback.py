@@ -19,3 +19,4 @@ class InviteUser(CallbackData, prefix="Invite user"):
 class Agreement(CallbackData, prefix="Agreement"):
     """ Если True, значит второй участник принял приглашение. """
     exist: bool
+    back_to_user: int
