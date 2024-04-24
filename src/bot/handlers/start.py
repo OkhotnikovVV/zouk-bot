@@ -30,7 +30,7 @@ async def command_help(message: types.Message) -> None:
 
 
 @router.message(Command('go'))
-async def command_inside_event(message: types.Message, db: db = db) -> None:
+async def command_inside_event(message: types.Message) -> None:
     user = str(message.from_user.id)
     profile = await db.select.get_user(user)
     await message.answer(str(profile))

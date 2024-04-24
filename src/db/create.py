@@ -1,3 +1,6 @@
+from sqlite3 import Connection
+from typing import Coroutine, Any
+
 from .transaction import transaction
 
 
