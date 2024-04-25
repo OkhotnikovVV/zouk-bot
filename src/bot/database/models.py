@@ -34,6 +34,15 @@ class Group(Base):
     # Позже добавить relationship
 
 
+class Event(Base):
+    __tablename__ = 'events'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(25))
+    user: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    # Позже добавить relationship
+
+
 async def async_main():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
