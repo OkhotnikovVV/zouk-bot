@@ -2,10 +2,10 @@ from sqlalchemy import delete
 from sqlalchemy import select
 from sqlalchemy import update
 
-from .models import async_session
-from .models import Event
-from .models import Group
-from .models import User
+from src.database.models import async_session
+from src.database.models import Event
+from src.database.models import Group
+from src.database.models import User
 
 async def create_user(tg_id):
     async with async_session() as session:
