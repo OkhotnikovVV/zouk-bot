@@ -16,6 +16,7 @@ router = Router()
 @router.message(CommandStart())
 async def command_start(message: types.Message) -> None:
     """ Проверяем наличие данных о подписчике. При отсутствии - вносим в базу """
+    await message.answer("Welcome!")
     p = await db.select.user_exists(message.from_user.id)
     if p:
         print(p, 'Есть такой')
