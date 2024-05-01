@@ -25,15 +25,15 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     tg_id: Mapped[int] = mapped_column(BigInteger)
-    first_name: Mapped[str] = mapped_column(String(64))
-    last_name: Mapped[str] = mapped_column(String(64))
-    username: Mapped[str] = mapped_column(String(32))
-    language_code: Mapped[str] = mapped_column(String(10))
+    first_name: Mapped[str] = mapped_column(String(64), default='')
+    last_name: Mapped[str] = mapped_column(String(64), default='')
+    username: Mapped[str] = mapped_column(String(32), default='')
+    language_code: Mapped[str] = mapped_column(String(10), default='')
     is_premium_tg: Mapped[bool | None] = mapped_column(Boolean, default=None)
     photo_id: Mapped[str | None] = mapped_column(String(100), default=None)
     role: Mapped[str | None] = mapped_column(String(10), default=None)
     created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(insert_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(insert_default=func.now(), onupdate=func.now())
 
     def __str__(self):
         return f"<User:{self.tg_id}>"

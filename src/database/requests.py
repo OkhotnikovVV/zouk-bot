@@ -19,9 +19,15 @@ async def create_user(message: types.Message) -> None:
         if not user:
             first_name = message.from_user.first_name
             last_name = message.from_user.last_name
+            username = message.from_user.username
+            language_code = message.from_user.language_code
+            is_premium_tg = message.from_user.is_premium
             session.add(User(tg_id=tg_id,
                              first_name=first_name,
                              last_name=last_name,
+                             username=username,
+                             language_code=language_code,
+                             is_premium_tg=is_premium_tg,
                              ))
             await session.commit()
 
