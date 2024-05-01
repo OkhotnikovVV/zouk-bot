@@ -1,4 +1,5 @@
 import pytest
+import pytest_asyncio
 from aiogram import Dispatcher
 
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -7,7 +8,7 @@ from aiogram.fsm.storage.redis import RedisStorage
 from mocked_bot import MockedBot
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture()
 @pytest.mark.redis
 async def redis_storage(redis_server):
     if not redis_server:
@@ -25,7 +26,7 @@ async def redis_storage(redis_server):
         await storage.close()
 
 
-@pytest.fixture(scope='session')
+@pytest_asyncio.fixture(scope='session')
 async def memory_storage():
     storage = MemoryStorage()
     try:
@@ -39,7 +40,7 @@ def bot():
     return MockedBot()
 
 
-@pytest.fixture()
+@pytest_asyncio.fixture()
 async def dispatcher():
     dp = Dispatcher()
     await dp.emit_startup()

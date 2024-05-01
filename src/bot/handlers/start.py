@@ -5,6 +5,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
+from database.requests import create_user
 from src import db
 from src.bot.keyboards.reply import main_kb
 from src.bot.keyboards.builders.user import find_kb
@@ -17,13 +18,9 @@ router = Router()
 async def command_start(message: types.Message) -> None:
     """ Проверяем наличие данных о подписчике. При отсутствии - вносим в базу """
     await message.answer("Welcome!")
-    p = await db.select.user_exists(message.from_user.id)
-    if p:
-        print(p, 'Есть такой')
-    else:
-        print('Регистрация')
-        await db.insert.add_user(message)
-
+    print(message.from_user)
+    await create_user(message.from_user.id)
+    print()
 
 @router.message(Command("help"))
 async def command_help(message: types.Message) -> None:

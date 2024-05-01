@@ -1,4 +1,6 @@
-from sqlalchemy import BigInteger
+from datetime import datetime
+
+from sqlalchemy import BigInteger, Boolean, func
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
@@ -22,7 +24,19 @@ class User(Base):
     __tablename__ = 'users'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    tg_id = mapped_column(BigInteger)
+    tg_id: Mapped[int] = mapped_column(BigInteger)
+    first_name: Mapped[str] = mapped_column(String(64))
+    last_name: Mapped[str] = mapped_column(String(64))
+    username: Mapped[str] = mapped_column(String(32))
+    language_code: Mapped[str] = mapped_column(String(10))
+    is_premium_tg: Mapped[bool | None] = mapped_column(Boolean, default=None)
+    photo_id: Mapped[str | None] = mapped_column(String(100), default=None)
+    role: Mapped[str | None] = mapped_column(String(10), default=None)
+    created_at: Mapped[datetime] = mapped_column(insert_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(insert_default=func.now())
+
+    def __str__(self):
+        return f"<User:{self.tg_id}>"
 
 
 class Group(Base):
