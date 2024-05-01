@@ -36,3 +36,14 @@ async def get_user(tg_id):
     async with async_session() as session:
         user = await session.scalar(select(User).where(User.tg_id == tg_id))
         return user
+
+
+async def create_event(tg_id):
+    async with async_session() as session:
+        # name
+        # country
+        # city
+        # school
+        # time_start
+        time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
+        event = await session.scalar(select(Event).where(Event.tg_id == tg_id))

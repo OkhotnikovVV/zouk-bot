@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from sqlalchemy import BigInteger, Boolean, func
+from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
@@ -52,10 +52,18 @@ class Event(Base):
     __tablename__ = 'events'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(25))
+    name: Mapped[str] = mapped_column(String(32))
     user: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    country: Mapped[str] = mapped_column(String(32), default='')
+    city: Mapped[str] = mapped_column(String(32), default='')
+    school: Mapped[str] = mapped_column(String(32), default='')
+    time_start: Mapped[datetime] = mapped_column(insert_default=func.now())
+    time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
     # Позже добавить relationship
 
+    __table_args__ = (
+        UniqueConstraint('name', 'country', 'city', 'school', 'time_start', 'time_end', name='unique_event'),
+    )
 
 async def async_main():
     async with engine.begin() as conn:

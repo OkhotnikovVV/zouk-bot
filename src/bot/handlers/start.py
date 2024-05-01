@@ -18,9 +18,8 @@ router = Router()
 async def command_start(message: types.Message) -> None:
     """ Проверяем наличие данных о подписчике. При отсутствии - вносим в базу """
     await message.answer("Welcome!")
-    print(message.from_user)
     await create_user(message)
-    print()
+
 
 @router.message(Command("help"))
 async def command_help(message: types.Message) -> None:
