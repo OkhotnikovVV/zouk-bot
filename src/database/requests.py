@@ -12,6 +12,7 @@ from src.database.models import User
 
 
 async def create_user(message: types.Message) -> None:
+    """Проверяем наличие данных о пользователе. При отсутствии - вносим в базу."""
     async with async_session() as session:
         tg_id = message.from_user.id
         user = await session.scalar(select(User).where(User.tg_id == tg_id))
