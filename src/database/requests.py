@@ -5,7 +5,7 @@ from sqlalchemy import delete
 from sqlalchemy import select
 from sqlalchemy import update
 
-from src.database.models import async_session
+from src.database.models import async_session, UserGroup
 from src.database.models import Event
 from src.database.models import Group
 from src.database.models import User
@@ -37,6 +37,20 @@ async def get_user(tg_id):
     async with async_session() as session:
         user = await session.scalar(select(User).where(User.tg_id == tg_id))
         return user
+
+
+async def join_to_group(message: types.Message):
+    async with async_session() as session:
+        tg_id = message.from_user.id
+        group = ['manager']
+        user = 1
+        user_groups = await session.scalar(select(UserGroup).where((UserGroup.user == tg_id) & (UserGroup.group == group)))
+        if not user_groups:
+            session.add(UserGroup(user=user,
+                                  group=group,
+                                  ))
+            await session.commit()
+
 
 
 async def create_event(tg_id):

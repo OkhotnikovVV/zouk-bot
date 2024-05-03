@@ -5,7 +5,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
-from database.requests import create_user
+from database.requests import create_user, join_to_group
 from src import db
 from src.bot.keyboards.reply import main_kb
 from src.bot.keyboards.builders.user import find_kb
@@ -24,6 +24,12 @@ async def command_start(message: types.Message) -> None:
 @router.message(Command("help"))
 async def command_help(message: types.Message) -> None:
     await message.answer("It is help!")
+
+
+@router.message(Command("join_to_group"))
+async def command_help(message: types.Message) -> None:
+    await message.answer("Присоединиться к группе организаторов")
+    await join_to_group(message)
 
 
 @router.message(Command('go'))

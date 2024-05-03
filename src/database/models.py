@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint
+from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint, PrimaryKeyConstraint
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
@@ -44,8 +44,18 @@ class Group(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(25))
-    user: Mapped[int] = mapped_column(ForeignKey('users.id'))
     # Позже добавить relationship
+
+
+class UserGroup(Base):
+    __tablename__ = 'user_groups'
+
+    user: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    group: Mapped[int] = mapped_column(ForeignKey('groups.id'))
+
+    __table_args__ = (
+        PrimaryKeyConstraint('user', 'group'),
+    )
 
 
 class Event(Base):
