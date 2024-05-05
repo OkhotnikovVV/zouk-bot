@@ -5,7 +5,7 @@ from aiogram import Bot
 from src.bot.settings import conf
 from src.bot.utils.dispatcher import get_dispatcher
 from src.db.create import create_database
-from src.bot.database.models import async_main
+from database.models import async_main
 #logging.basicConfig(level=logging.INFO)
 
 
