@@ -68,7 +68,7 @@ class Event(Base):
     city: Mapped[str] = mapped_column(String(32), default='')
     school: Mapped[str] = mapped_column(String(32), default='')
     time_start: Mapped[datetime] = mapped_column(insert_default=func.now())
-    time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
+    time_end: Mapped[datetime] = mapped_column(default=func.now())
     # Позже добавить relationship
 
     __table_args__ = (

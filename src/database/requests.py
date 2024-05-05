@@ -58,10 +58,9 @@ async def get_group(name: str) -> Union[int, None]:
         return group.id
 
 
-async def is_user_in_group(tg_id, group_name='manager') -> Union[bool, None]:
+async def is_user_in_group(user, group_name='manager') -> Union[bool, None]:
     async with async_session() as session:
-        user = await get_user(tg_id)
-        group = get_group(group_name)
+        group = await get_group(group_name)
         is_user = await session.scalar(select(UserGroup).where(UserGroup.user == user & UserGroup.group == group))
         return is_user
 
@@ -69,21 +68,22 @@ async def is_user_in_group(tg_id, group_name='manager') -> Union[bool, None]:
 async def get_event(name: str) -> Union[int, None]:
     async with async_session() as session:
         event = await session.scalar(select(Event).where(Event.name == name))
-        return event.id
+        return event
 
 
 async def create_event(message: types.Message, name='Вечеринка'):
     async with async_session() as session:
-        event = get_event(name)
+        event = await get_event(name)
         tg_id = message.from_user.id
-        if not event and is_user_in_group(tg_id):
+        user = await get_user(tg_id)
+        if not event and await is_user_in_group(user):
             session.add(Event(name=name,
-                              group=group,
+                              user=user,
                               ))
             await session.commit()
             # country
             # city
             # school
-            time_start = '11 августа 2024'
-            time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
-            event = await session.scalar(select(Event).where(Event.tg_id == tg_id))
+            # time_start = '11 августа 2024'
+            # time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
+            # event = await session.scalar(select(Event).where(Event.tg_id == tg_id))

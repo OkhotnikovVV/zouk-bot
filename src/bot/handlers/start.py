@@ -5,7 +5,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
-from database.requests import create_user, join_to_group
+from database.requests import create_user, join_to_group, create_event
 from src import db
 from src.bot.keyboards.reply import main_kb
 from src.bot.keyboards.builders.user import find_kb
@@ -27,15 +27,15 @@ async def command_help(message: types.Message) -> None:
 
 
 @router.message(Command("join_to_group"))
-async def command_help(message: types.Message) -> None:
+async def command_join_to_group(message: types.Message) -> None:
     await message.answer("Присоединиться к группе организаторов")
     await join_to_group(message)
 
 
 @router.message(Command('create_event'))
-async def command_inside_event(message: types.Message) -> None:
-    user = str(message.from_user.id)
-    print(message.text)
+async def command_create_event(message: types.Message) -> None:
+    # user = str(message.from_user.id)
+    await create_event(message)
     # await message.answer(str(profile))
     # print(*p)
 
@@ -44,7 +44,7 @@ async def command_inside_event(message: types.Message) -> None:
 
 
 @router.message(Command('meow'))
-async def command_inside_event(message: types.Message) -> None:
+async def command_meow(message: types.Message) -> None:
     """ Поиск участников по базе. Только тех, кто зарегистрирован на данный ивент. """
     await message.delete()
     users = await db.select.get_users()
