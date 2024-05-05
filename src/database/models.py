@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint, PrimaryKeyConstraint
+from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint, PrimaryKeyConstraint, bindparam
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
@@ -68,7 +68,7 @@ class Event(Base):
     city: Mapped[str] = mapped_column(String(32), default='')
     school: Mapped[str] = mapped_column(String(32), default='')
     time_start: Mapped[datetime] = mapped_column(insert_default=func.now())
-    time_end: Mapped[datetime] = mapped_column(default=func.now())
+    time_end: Mapped[datetime] = mapped_column(default=datetime.now() + timedelta(hours=3))
     # Позже добавить relationship
 
     __table_args__ = (

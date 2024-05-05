@@ -55,13 +55,14 @@ async def join_to_group(message: types.Message):
 async def get_group(name: str) -> Union[int, None]:
     async with async_session() as session:
         group = await session.scalar(select(Group).where(Group.name == name))
-        return group.id
+        return group
 
 
 async def is_user_in_group(user, group_name='manager') -> Union[bool, None]:
     async with async_session() as session:
         group = await get_group(group_name)
-        is_user = await session.scalar(select(UserGroup).where(UserGroup.user == user & UserGroup.group == group))
+        group = 'manager'
+        is_user = await session.scalar(select(UserGroup).where((UserGroup.user == user) & (UserGroup.group == group)))
         return is_user
 
 
