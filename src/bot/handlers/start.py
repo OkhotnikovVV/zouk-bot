@@ -32,11 +32,11 @@ async def command_help(message: types.Message) -> None:
     await join_to_group(message)
 
 
-@router.message(Command('go'))
+@router.message(Command('create_event'))
 async def command_inside_event(message: types.Message) -> None:
     user = str(message.from_user.id)
-    profile = await db.select.get_user(user)
-    await message.answer(str(profile))
+    print(message.text)
+    # await message.answer(str(profile))
     # print(*p)
 
     # await message.answer('Hello', reply_markup=main_kb)
