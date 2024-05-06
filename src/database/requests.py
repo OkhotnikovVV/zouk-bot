@@ -5,7 +5,7 @@ from sqlalchemy import delete
 from sqlalchemy import select
 from sqlalchemy import update
 
-from src.database.models import async_session, UserGroup
+from src.database.models import async_session, UserGroup, EventUserJoin
 from src.database.models import Event
 from src.database.models import Group
 from src.database.models import User
@@ -44,7 +44,7 @@ async def join_to_group(message: types.Message):
         tg_id = message.from_user.id
         group = 'manager'
         user = await get_user(tg_id)
-        user_groups = await session.scalar(select(UserGroup).where((UserGroup.user == tg_id) & (UserGroup.group == group)))
+        user_groups = await session.scalar(select(UserGroup).where((UserGroup.user == tg_id) & (UserGroup.group == group)))  # Обратить внимание
         if not user_groups:
             session.add(UserGroup(user=user,
                                   group=group,
@@ -61,18 +61,18 @@ async def get_group(name: str) -> Union[int, None]:
 async def is_user_in_group(user, group_name='manager') -> Union[bool, None]:
     async with async_session() as session:
         group = await get_group(group_name)
-        group = 'manager'
-        is_user = await session.scalar(select(UserGroup).where((UserGroup.user == user) & (UserGroup.group == group)))
-        return is_user
+        user_in_group = await session.scalar(select(UserGroup).where((UserGroup.user == user) & (UserGroup.group == group)))
+        return user_in_group
 
 
 async def get_event(name: str) -> Union[int, None]:
     async with async_session() as session:
         event = await session.scalar(select(Event).where(Event.name == name))
-        return event
+        if event:
+            return event.id
 
 
-async def create_event(message: types.Message, name='Вечеринка'):
+async def create_event(message: types.Message, name: str='Вечеринка'):
     async with async_session() as session:
         event = await get_event(name)
         tg_id = message.from_user.id
@@ -82,9 +82,21 @@ async def create_event(message: types.Message, name='Вечеринка'):
                               user=user,
                               ))
             await session.commit()
-            # country
-            # city
-            # school
-            # time_start = '11 августа 2024'
-            # time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
-            # event = await session.scalar(select(Event).where(Event.tg_id == tg_id))
+
+
+async def is_user_at_event(user: int, event: int) -> Union[bool, None]:
+    async with async_session() as session:
+        user_at_event = await session.scalar(select(EventUserJoin).where((EventUserJoin.event == event) & (EventUserJoin.user == user)))
+        return user_at_event
+
+
+async def join_event(message: types.Message, name: str='Вечеринка'):
+    async with async_session() as session:
+        event = await get_event(name)
+        tg_id = message.from_user.id
+        user = await get_user(tg_id)
+        if not await is_user_at_event(user, event):
+            session.add(EventUserJoin(event=event,
+                                      user=user,
+                                      ))
+            await session.commit()

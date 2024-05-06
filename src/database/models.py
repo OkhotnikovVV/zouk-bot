@@ -75,6 +75,18 @@ class Event(Base):
         UniqueConstraint('name', 'country', 'city', 'school', 'time_start', 'time_end', name='unique_event'),
     )
 
+
+class EventUserJoin(Base):
+    __tablename__ = 'event_user_join'
+
+    event: Mapped[int] = mapped_column(ForeignKey('events.id'))
+    user: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
+    __table_args__ = (
+        PrimaryKeyConstraint('event', 'user'),
+    )
+
+
 async def async_main():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
