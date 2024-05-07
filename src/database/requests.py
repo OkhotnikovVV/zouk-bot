@@ -12,38 +12,33 @@ from src.database.models import User
 
 
 async def create_user(message: types.Message) -> None:
-    """Проверяем наличие данных о пользователе. При отсутствии - вносим в базу."""
+    """Добавляет пользователя в базу."""
+    async with async_session() as session:
+        session.add(User(tg_id=message.from_user.id,
+                         first_name=message.from_user.first_name,
+                         last_name=message.from_user.last_name,
+                         username=message.from_user.username,
+                         language_code=message.from_user.language_code,
+                         is_premium_tg=message.from_user.is_premium,
+                         ))
+        await session.commit()
+
+
+async def get_user(message: types.Message) -> int:
+    """Проверяет наличие пользователя в базе."""
     async with async_session() as session:
         tg_id = message.from_user.id
         user = await session.scalar(select(User).where(User.tg_id == tg_id))
-
         if not user:
-            first_name = message.from_user.first_name
-            last_name = message.from_user.last_name
-            username = message.from_user.username
-            language_code = message.from_user.language_code
-            is_premium_tg = message.from_user.is_premium
-            session.add(User(tg_id=tg_id,
-                             first_name=first_name,
-                             last_name=last_name,
-                             username=username,
-                             language_code=language_code,
-                             is_premium_tg=is_premium_tg,
-                             ))
-            await session.commit()
-
-
-async def get_user(tg_id: int) -> Union[int, None]:
-    async with async_session() as session:
-        user = await session.scalar(select(User).where(User.tg_id == tg_id))
+            await create_user(message)
         return user.id
 
 
-async def join_to_group(message: types.Message):
+async def join_to_group(message: types.Message) -> None:
     async with async_session() as session:
         tg_id = message.from_user.id
         group = 'manager'
-        user = await get_user(tg_id)
+        user = await get_user(message)
         user_groups = await session.scalar(select(UserGroup).where((UserGroup.user == tg_id) & (UserGroup.group == group)))  # Обратить внимание
         if not user_groups:
             session.add(UserGroup(user=user,
@@ -75,8 +70,7 @@ async def get_event(name: str) -> Union[int, None]:
 async def create_event(message: types.Message, name: str='Вечеринка'):
     async with async_session() as session:
         event = await get_event(name)
-        tg_id = message.from_user.id
-        user = await get_user(tg_id)
+        user = await get_user(message)
         if not event and await is_user_in_group(user):
             session.add(Event(name=name,
                               user=user,
@@ -93,8 +87,7 @@ async def is_user_at_event(user: int, event: int) -> Union[bool, None]:
 async def join_event(message: types.Message, name: str='Вечеринка'):
     async with async_session() as session:
         event = await get_event(name)
-        tg_id = message.from_user.id
-        user = await get_user(tg_id)
+        user = await get_user(message)
         if not await is_user_at_event(user, event):
             session.add(EventUserJoin(event=event,
                                       user=user,

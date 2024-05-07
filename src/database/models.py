@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint, PrimaryKeyConstraint, bindparam
+from sqlalchemy import BigInteger, Boolean, func, UniqueConstraint, PrimaryKeyConstraint
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
