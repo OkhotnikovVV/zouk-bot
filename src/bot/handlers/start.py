@@ -5,7 +5,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.filters import CommandStart
 
-from database.requests import create_user, join_to_group, create_event, join_event
+from database.requests import create_user, join_to_group, create_event, join_event, get_event_participants
 from src import db
 from src.bot.keyboards.reply import main_kb
 from src.bot.keyboards.builders.user import find_kb
@@ -45,7 +45,8 @@ async def command_join_event(message: types.Message) -> None:
 @router.message(Command('meow'))
 async def command_meow(message: types.Message) -> None:
     """ Поиск участников по базе. Только тех, кто зарегистрирован на данный ивент. """
-    await message.delete()
-    users = await db.select.get_users()
-    await message.answer_photo(photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ', reply_markup=find_kb(users))
+    participants = await get_event_participants(message)
+    await message.answer(participants)
+    # users = await db.select.get_users()
+    # await message.answer_photo(photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ', reply_markup=find_kb(users))
 

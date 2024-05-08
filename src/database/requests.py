@@ -93,3 +93,13 @@ async def join_event(message: types.Message, name: str='Вечеринка'):
                                       user=user,
                                       ))
             await session.commit()
+
+
+async def get_event_participants(message: types.Message, name: str='Вечеринка'):
+    async with async_session() as session:
+        event = await get_event(name)
+        user = await get_user(message)
+        if await is_user_at_event(user, event):
+            participants = await session.execute(select(EventUserJoin).where(EventUserJoin.event == event))
+            # print(' '.join([row[0].user for row in participants]))
+            return '{}, {}'.format(*[row[0].user for row in participants])
