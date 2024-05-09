@@ -101,5 +101,11 @@ async def get_event_participants(message: types.Message, name: str='Вечери
         user = await get_user(message)
         if await is_user_at_event(user, event):
             participants = await session.execute(select(EventUserJoin).where(EventUserJoin.event == event))
-            # print(' '.join([row[0].user for row in participants]))
-            return '{}, {}'.format(*[row[0].user for row in participants])
+            return [row[0].user for row in participants]
+
+
+async def show_photo(message: types.Message, user_id=603776715):
+    async with async_session() as session:
+        photo = await session.scalar(select(User).where(User.tg_id == user_id))
+        if photo:
+            return photo.photo_id
