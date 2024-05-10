@@ -60,3 +60,8 @@ async def command_show_photo(message: types.Message) -> None:
     # await message.answer_photo(
     #     photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ',
     #     )
+
+
+@router.message(Command('go'))
+async def command_go(message: types.Message) -> None:
+    await message.answer(reply_markup=main_kb, text='fff')
