@@ -1,5 +1,5 @@
 from src import db
-from aiogram import types
+from aiogram import types, Bot
 # from aiogram.types import KeyboardButton
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -39,11 +39,15 @@ def find_kb(users) -> types.InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def show_user(user) -> types.InlineKeyboardMarkup:
-    """ Клавиатура анкеты участника ивента. """
-    builder = InlineKeyboardBuilder()
-    builder.button(text=str(user), callback_data='sdfgsdfg')
-    return builder.as_markup()
+def show_user_menu():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="Пригласить", callback_data="num_decr"),
+            types.InlineKeyboardButton(text="Пропустить", callback_data="num_incr")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
 
 
 def invite(from_user, to_user) -> types.InlineKeyboardMarkup:
