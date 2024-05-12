@@ -3,6 +3,7 @@ from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.filters import CommandStart
+from aiogram.types import CallbackQuery
 
 from database.requests import create_user, join_to_group, create_event, join_event, get_event_participants, show_photo
 from src.bot.keyboards.reply import main_kb
@@ -55,3 +56,15 @@ async def command_show_photo(message: types.Message) -> None:
 async def command_go(message: types.Message) -> None:
     photo = await show_photo(message)
     await message.answer_photo(photo=photo, reply_markup=show_user_menu())
+
+
+@router.callback_query(F.data == 'invite')
+async def callback_invite(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('invite')
+
+
+@router.callback_query(F.data == 'skip')
+async def callback_skip(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('skip')

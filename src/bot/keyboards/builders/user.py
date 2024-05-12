@@ -42,8 +42,8 @@ def find_kb(users) -> types.InlineKeyboardMarkup:
 def show_user_menu():
     buttons = [
         [
-            types.InlineKeyboardButton(text="Пригласить", callback_data="num_decr"),
-            types.InlineKeyboardButton(text="Пропустить", callback_data="num_incr")
+            types.InlineKeyboardButton(text="Пригласить", callback_data="invite"),
+            types.InlineKeyboardButton(text="Пропустить", callback_data="skip")
         ]
     ]
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
