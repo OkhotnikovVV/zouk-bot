@@ -62,9 +62,11 @@ async def command_go(message: types.Message) -> None:
 async def callback_invite(callback: CallbackQuery) -> None:
     await callback.answer()
     print('invite')
+    await callback.message.delete()
 
 
 @router.callback_query(F.data == 'skip')
 async def callback_skip(callback: CallbackQuery) -> None:
     await callback.answer()
     print('skip')
+    await callback.message.delete()
