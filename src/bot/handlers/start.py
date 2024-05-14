@@ -1,15 +1,13 @@
-import asyncio
 from aiogram import F
 from aiogram import types
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.filters import CommandStart
+from aiogram.types import CallbackQuery
 
-from database.requests import create_user, join_to_group
-from src import db
+from database.requests import create_user, join_to_group, create_event, join_event, get_event_participants, show_photo
 from src.bot.keyboards.reply import main_kb
-from src.bot.keyboards.builders.user import find_kb
-
+from src.bot.keyboards.builders.user import show_user_menu
 
 router = Router()
 
@@ -27,26 +25,55 @@ async def command_help(message: types.Message) -> None:
 
 
 @router.message(Command("join_to_group"))
-async def command_help(message: types.Message) -> None:
+async def command_join_to_group(message: types.Message) -> None:
     await message.answer("Присоединиться к группе организаторов")
     await join_to_group(message)
 
 
 @router.message(Command('create_event'))
-async def command_inside_event(message: types.Message) -> None:
-    user = str(message.from_user.id)
-    print(message.text)
-    # await message.answer(str(profile))
-    # print(*p)
+async def command_create_event(message: types.Message) -> None:
+    await create_event(message)
 
-    # await message.answer('Hello', reply_markup=main_kb)
-    # await message.answer(str(p))
+
+@router.message(Command('join_event'))
+async def command_join_event(message: types.Message) -> None:
+    await join_event(message)
 
 
 @router.message(Command('meow'))
-async def command_inside_event(message: types.Message) -> None:
+async def command_meow(message: types.Message) -> None:
     """ Поиск участников по базе. Только тех, кто зарегистрирован на данный ивент. """
-    await message.delete()
-    users = await db.select.get_users()
-    await message.answer_photo(photo='AgACAgIAAxkBAAILAWU4BQ4KDDFTIHEB9bY3MjHuWMt5AAJX1jEbY2bBSfT20KWwgEUNAQADAgADeAADMAQ', reply_markup=find_kb(users))
+    participants = await get_event_participants(message)
 
+
+@router.message(Command('show_photo'))
+async def command_show_photo(message: types.Message) -> None:
+    photo = await show_photo(message)
+    await message.answer_photo(photo=photo)
+
+
+@router.message(Command('go'))
+async def command_go(message: types.Message) -> None:
+    photo = await show_photo(message)
+    await message.answer_photo(photo=photo, reply_markup=show_user_menu())
+
+
+@router.callback_query(F.data == 'invite')
+async def callback_invite(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('invite')
+    await callback.message.delete()
+
+
+@router.callback_query(F.data == 'skip')
+async def callback_skip(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('skip')
+    await callback.message.delete()
+
+
+@router.callback_query(F.data == 'create_event')
+async def callback_go(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('skip')
+    await callback.message.delete()

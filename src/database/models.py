@@ -68,12 +68,24 @@ class Event(Base):
     city: Mapped[str] = mapped_column(String(32), default='')
     school: Mapped[str] = mapped_column(String(32), default='')
     time_start: Mapped[datetime] = mapped_column(insert_default=func.now())
-    time_end: Mapped[datetime] = mapped_column(insert_default=func.now() + timedelta(hours=3))
+    time_end: Mapped[datetime] = mapped_column(default=datetime.now() + timedelta(hours=3))
     # Позже добавить relationship
 
     __table_args__ = (
         UniqueConstraint('name', 'country', 'city', 'school', 'time_start', 'time_end', name='unique_event'),
     )
+
+
+class EventUserJoin(Base):
+    __tablename__ = 'event_user_join'
+
+    event: Mapped[int] = mapped_column(ForeignKey('events.id'))
+    user: Mapped[int] = mapped_column(ForeignKey('users.id'))
+
+    __table_args__ = (
+        PrimaryKeyConstraint('event', 'user'),
+    )
+
 
 async def async_main():
     async with engine.begin() as conn:

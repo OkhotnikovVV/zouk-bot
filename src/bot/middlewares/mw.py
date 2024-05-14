@@ -38,10 +38,10 @@ class ThrottlingMiddleware(BaseMiddleware):
             await self.storage.redis.set(name=user, value=self.counter, ex=self.ttl_counter + self.counter)
 
             if int(check_user) > 10:
-                return await event.message.answer(f"""
-                Мы обнаружили повышенную активность.
-                Вы сможете отправлять сообщения вновь через {await self.storage.redis.ttl(name=user)} секунд.
-                """)
+                return await event.message.answer(
+                    "Мы обнаружили повышенную активность.\n"
+                    f"Вы сможете отправлять сообщения вновь через {await self.storage.redis.ttl(name=user)} секунд."
+                    )
         else:
             self.counter = 1
             await self.storage.redis.set(name=user, value=1, ex=10)
