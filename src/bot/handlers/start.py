@@ -70,3 +70,10 @@ async def callback_skip(callback: CallbackQuery) -> None:
     await callback.answer()
     print('skip')
     await callback.message.delete()
+
+
+@router.callback_query(F.data == 'create_event')
+async def callback_go(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('skip')
+    await callback.message.delete()

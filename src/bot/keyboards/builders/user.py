@@ -39,11 +39,21 @@ def find_kb(users) -> types.InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def show_user_menu():
+def kb_show_participants():
     buttons = [
         [
             types.InlineKeyboardButton(text="Пригласить", callback_data="invite"),
             types.InlineKeyboardButton(text="Пропустить", callback_data="skip")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
+def kb_create_event():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="Создать", callback_data="create_event"),
         ]
     ]
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
