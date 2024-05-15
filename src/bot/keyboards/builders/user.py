@@ -60,6 +60,16 @@ def kb_create_event():
     return keyboard
 
 
+def kb_join_event():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="Присоединиться", callback_data="join_event"),
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons)
+    return keyboard
+
+
 def invite(from_user, to_user) -> types.InlineKeyboardMarkup:
     """ Кнопка приглашения участника. """
     builder = InlineKeyboardBuilder()

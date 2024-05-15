@@ -7,7 +7,7 @@ from aiogram.types import CallbackQuery
 
 from database.requests import create_user, join_to_group, create_event, join_event, get_event_participants, show_photo
 from src.bot.keyboards.reply import main_kb
-from src.bot.keyboards.builders.user import show_user_menu
+from src.bot.keyboards.builders.user import kb_show_participants
 
 router = Router()
 
@@ -55,7 +55,7 @@ async def command_show_photo(message: types.Message) -> None:
 @router.message(Command('go'))
 async def command_go(message: types.Message) -> None:
     photo = await show_photo(message)
-    await message.answer_photo(photo=photo, reply_markup=show_user_menu())
+    await message.answer_photo(photo=photo, reply_markup=kb_show_participants())
 
 
 @router.callback_query(F.data == 'invite')
@@ -75,5 +75,12 @@ async def callback_skip(callback: CallbackQuery) -> None:
 @router.callback_query(F.data == 'create_event')
 async def callback_go(callback: CallbackQuery) -> None:
     await callback.answer()
-    print('skip')
+    print('create_event')
+    await callback.message.delete()
+
+
+@router.callback_query(F.data == 'join_event')
+async def callback_go(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('join_event')
     await callback.message.delete()
