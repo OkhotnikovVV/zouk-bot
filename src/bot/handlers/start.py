@@ -73,14 +73,21 @@ async def callback_skip(callback: CallbackQuery) -> None:
 
 
 @router.callback_query(F.data == 'create_event')
-async def callback_go(callback: CallbackQuery) -> None:
+async def callback_create_event(callback: CallbackQuery) -> None:
     await callback.answer()
     print('create_event')
     await callback.message.delete()
 
 
 @router.callback_query(F.data == 'join_event')
-async def callback_go(callback: CallbackQuery) -> None:
+async def callback_join_event(callback: CallbackQuery) -> None:
     await callback.answer()
     print('join_event')
+    await callback.message.delete()
+
+
+@router.callback_query(F.data == 'join_to_group')
+async def callback_join_to_group(callback: CallbackQuery) -> None:
+    await callback.answer()
+    print('join_to_group')
     await callback.message.delete()
