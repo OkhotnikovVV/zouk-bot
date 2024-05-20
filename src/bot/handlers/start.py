@@ -7,7 +7,7 @@ from aiogram.types import CallbackQuery
 
 from database.requests import create_user, join_to_group, create_event, join_event, get_event_participants, show_photo
 from src.bot.keyboards.reply import main_kb
-from src.bot.keyboards.builders.user import kb_show_participants
+from src.bot.keyboards.builders.user import kb_show_participants, kb_create_event
 
 router = Router()
 
@@ -32,7 +32,8 @@ async def command_join_to_group(message: types.Message) -> None:
 
 @router.message(Command('create_event'))
 async def command_create_event(message: types.Message) -> None:
-    await create_event(message)
+    # await create_event(message)
+    await message.answer(text=message.text, reply_markup=kb_create_event())
 
 
 @router.message(Command('join_event'))
