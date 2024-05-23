@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.filters import CommandStart
 from aiogram.types import CallbackQuery
 
-from database.requests import create_user, join_to_group, create_event, join_event, get_event_participants, show_photo
+from database.requests import create_user, join_to_group, create_event, join_to_event, get_event_participants, show_photo
 from src.bot.keyboards.reply import main_kb
 from src.bot.keyboards.builders.user import kb_show_participants, kb_create_event
 
@@ -36,9 +36,9 @@ async def command_create_event(message: types.Message) -> None:
     await message.answer(text=message.text, reply_markup=kb_create_event())
 
 
-@router.message(Command('join_event'))
-async def command_join_event(message: types.Message) -> None:
-    await join_event(message)
+@router.message(Command('join_to_event'))
+async def command_join_to_event(message: types.Message) -> None:
+    await join_to_event(message)
 
 
 @router.message(Command('meow'))
@@ -80,10 +80,10 @@ async def callback_create_event(callback: CallbackQuery) -> None:
     await callback.message.delete()
 
 
-@router.callback_query(F.data == 'join_event')
-async def callback_join_event(callback: CallbackQuery) -> None:
+@router.callback_query(F.data == 'join_to_event')
+async def callback_join_to_event(callback: CallbackQuery) -> None:
     await callback.answer()
-    print('join_event')
+    print('join_to_event')
     await callback.message.delete()
 
 

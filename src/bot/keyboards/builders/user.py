@@ -60,7 +60,7 @@ def kb_create_event():
     return keyboard
 
 
-def kb_join_event():
+def kb_join_to_event():
     buttons = [
         [
             types.InlineKeyboardButton(text="Присоединиться", callback_data="join_event"),

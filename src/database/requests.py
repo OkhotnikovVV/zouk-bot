@@ -84,7 +84,7 @@ async def is_user_at_event(user: int, event: int) -> Union[bool, None]:
         return user_at_event
 
 
-async def join_event(message: types.Message, name: str='Вечеринка'):
+async def join_to_event(message: types.Message, name: str='Вечеринка'):
     async with async_session() as session:
         event = await get_event(name)
         user = await get_user(message)
